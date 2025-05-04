@@ -1,0 +1,151 @@
+/* Custom styles for Alumni Connect */
+
+/* Timeline styling for career updates */
+.timeline {
+  position: relative;
+  padding-left: 30px;
+}
+
+.timeline:before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0;
+  height: 100%;
+  width: 2px;
+  background-color: #e9ecef;
+}
+
+.timeline .card {
+  position: relative;
+}
+
+.timeline .card:before {
+  content: "";
+  position: absolute;
+  left: -36px;
+  top: 15px;
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background-color: #28a745;
+  border: 2px solid #fff;
+  box-shadow: 0 0 0 2px #28a745;
+}
+
+/* Card hover animations */
+.card-profile {
+  transition: all 0.3s;
+}
+
+.card-profile:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1) !important;
+}
+
+/* Event badges and ribbons */
+.ribbon {
+  width: 150px;
+  height: 150px;
+  overflow: hidden;
+  position: absolute;
+}
+
+.ribbon-top-right {
+  top: -10px;
+  right: -10px;
+}
+
+.ribbon-top-right::before,
+.ribbon-top-right::after {
+  border-top-color: transparent;
+  border-right-color: transparent;
+}
+
+.ribbon-top-right::before {
+  top: 0;
+  left: 0;
+}
+
+.ribbon-top-right::after {
+  bottom: 0;
+  right: 0;
+}
+
+.ribbon-top-right span {
+  position: absolute;
+  top: 30px;
+  right: -20px;
+  transform: rotate(45deg);
+  width: 100px;
+  padding: 5px 0;
+  background-color: #6c757d;
+  color: #fff;
+  text-align: center;
+  font-size: 12px;
+  font-weight: bold;
+}
+
+/* Dashboard stats cards */
+.stats-card {
+  border-left: 4px solid;
+  transition: transform 0.2s;
+}
+
+.stats-card:hover {
+  transform: scale(1.02);
+}
+
+.stats-card-primary {
+  border-color: #007bff;
+}
+
+.stats-card-success {
+  border-color: #28a745;
+}
+
+.stats-card-info {
+  border-color: #17a2b8;
+}
+
+.stats-card-warning {
+  border-color: #ffc107;
+}
+
+/* Profile badges */
+.badge-mentor {
+  background-color: #28a745;
+  color: white;
+}
+
+.badge-student {
+  background-color: #17a2b8;
+  color: white;
+}
+
+.badge-alumni {
+  background-color: #007bff;
+  color: white;
+}
+
+/* Footer styling */
+.footer-link {
+  color: #6c757d;
+  transition: color 0.2s;
+}
+
+.footer-link:hover {
+  color: #007bff;
+  text-decoration: none;
+}
+
+.social-icon {
+  font-size: 1.5rem;
+  margin: 0 10px;
+  color: #6c757d;
+  transition: color 0.2s;
+}
+
+.social-icon:hover {
+  color: #007bff;
+}

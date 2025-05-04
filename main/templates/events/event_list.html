@@ -1,0 +1,82 @@
+{% extends 'base.html' %}
+
+{% block title %}Events | Alumni Connect{% endblock %}
+
+{% block content %}
+<div class="container py-4">
+    <div class="row mb-4">
+        <div class="col-md-8">
+            <h1>Events</h1>
+            <p class="lead text-muted">Connect with fellow alumni and students at our upcoming events.</p>
+        </div>
+        <div class="col-md-4 text-end d-flex align-items-center justify-content-end">
+            {% if user.is_authenticated %}
+            {% if user.alumniprofile %}
+            <a href="{% url 'create_event' %}" class="btn btn-primary">
+                <i class="fas fa-plus-circle me-1"></i> Create Event
+            </a>
+            {% endif %}
+            {% endif %}
+        </div>
+    </div>
+
+    <!-- Upcoming Events -->
+    <h2>Upcoming Events</h2>
+    <hr>
+    {% if events %}
+    <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4 mb-5">
+        {% for event in events %}
+        <div class="col">
+            <div class="card h-100 shadow-sm">
+                <div class="card-body">
+                    <h5 class="card-title">{{ event.title }}</h5>
+                    <h6 class="text-muted mb-3">
+                        <i class="fas fa-calendar me-2"></i>{{ event.date|date:"F d, Y" }} at {{ event.date|date:"g:i A"
+                        }}
+                        <br>
+                        <i class="fas fa-map-marker-alt me-2"></i>{{ event.location }}
+                    </h6>
+                    <p class="card-text">{{ event.description|truncatechars:100 }}</p>
+                </div>
+                <div class="card-footer bg-transparent border-top-0 text-end">
+                    <a href="{% url 'event_detail' event.id %}" class="btn btn-outline-primary btn-sm">View Details</a>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+    {% else %}
+    <div class="alert alert-info">No upcoming events scheduled. Check back later!</div>
+    {% endif %}
+
+    <!-- Past Events -->
+    <h2>Past Events</h2>
+    <hr>
+    {% if past_events %}
+    <div class="row row-cols-1 row-cols-md-3 g-4">
+        {% for event in past_events %}
+        <div class="col">
+            <div class="card h-100 shadow-sm text-muted">
+                <div class="card-body">
+                    <div class="ribbon ribbon-top-right"><span>Past</span></div>
+                    <h5 class="card-title">{{ event.title }}</h5>
+                    <h6 class="mb-3">
+                        <i class="fas fa-calendar me-2"></i>{{ event.date|date:"F d, Y" }}
+                        <br>
+                        <i class="fas fa-map-marker-alt me-2"></i>{{ event.location }}
+                    </h6>
+                    <p class="card-text">{{ event.description|truncatechars:100 }}</p>
+                </div>
+                <div class="card-footer bg-transparent border-top-0 text-end">
+                    <a href="{% url 'event_detail' event.id %}" class="btn btn-outline-secondary btn-sm">View
+                        Details</a>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+    {% else %}
+    <div class="alert alert-info">No past events to display.</div>
+    {% endif %}
+</div>
+{% endblock %}

@@ -1,0 +1,117 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<!-- Hero Banner -->
+<div class="banner text-center">
+    <div class="container">
+        <h1 class="display-4 fw-bold">Welcome to Alumni Connect</h1>
+        <p class="lead">Bridging the gap between alumni and students for networking, mentorship, and growth</p>
+        {% if not user.is_authenticated %}
+        <div class="mt-4">
+            <a href="{% url 'register' %}" class="btn btn-primary btn-lg me-2">Join Today</a>
+            <a href="{% url 'login' %}" class="btn btn-outline-light btn-lg">Sign In</a>
+        </div>
+        {% endif %}
+    </div>
+</div>
+
+<div class="container">
+    <div class="row mb-4">
+        <div class="col-md-12 text-center">
+            <h2>Our Community at a Glance</h2>
+            <hr>
+        </div>
+    </div>
+
+    <div class="row mb-5 text-center">
+        <div class="col-md-4 mb-4">
+            <div class="card h-100 shadow-sm">
+                <div class="card-body">
+                    <i class="fas fa-users fa-3x text-primary mb-3"></i>
+                    <h3 class="card-title">{{ total_alumni }}</h3>
+                    <p class="card-text">Alumni Members</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4 mb-4">
+            <div class="card h-100 shadow-sm">
+                <div class="card-body">
+                    <i class="fas fa-calendar-alt fa-3x text-success mb-3"></i>
+                    <h3 class="card-title">{{ total_events }}</h3>
+                    <p class="card-text">Events Organized</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4 mb-4">
+            <div class="card h-100 shadow-sm">
+                <div class="card-body">
+                    <i class="fas fa-handshake fa-3x text-info mb-3"></i>
+                    <h3 class="card-title">{{ mentorship_count|default:"24" }}</h3>
+                    <p class="card-text">Mentorship Connections</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row mb-4">
+        <div class="col-md-6">
+            <h2>Upcoming Events</h2>
+            <hr>
+            {% if upcoming_events %}
+            {% for event in upcoming_events %}
+            <div class="card mb-3 shadow-sm">
+                <div class="card-body">
+                    <h5 class="card-title">{{ event.title }}</h5>
+                    <h6 class="card-subtitle mb-2 text-muted">
+                        <i class="fas fa-calendar me-2"></i>{{ event.date|date:"F d, Y" }} at {{ event.date|date:"g:i A"
+                        }}
+                        <br>
+                        <i class="fas fa-map-marker-alt me-2"></i>{{ event.location }}
+                    </h6>
+                    <p class="card-text">{{ event.description|truncatechars:100 }}</p>
+                    <a href="{% url 'event_detail' event.id %}" class="btn btn-sm btn-outline-primary">Event Details</a>
+                </div>
+            </div>
+            {% endfor %}
+            {% else %}
+            <p>No upcoming events scheduled.</p>
+            {% endif %}
+            <a href="{% url 'event_list' %}" class="btn btn-primary">View All Events</a>
+        </div>
+
+        <div class="col-md-6">
+            <h2>Recent Alumni</h2>
+            <hr>
+            <div class="row">
+                {% if recent_alumni %}
+                {% for profile in recent_alumni %}
+                <div class="col-md-6 mb-4">
+                    <div class="card card-profile h-100 shadow-sm">
+                        <div class="card-body text-center">
+                            {% if profile.profile_picture %}
+                            <img src="{{ profile.profile_picture.url }}" alt="{{ profile.user.username }}"
+                                class="rounded-circle mb-3" style="width: 100px; height: 100px; object-fit: cover;">
+                            {% else %}
+                            <i class="fas fa-user-circle fa-5x text-secondary mb-3"></i>
+                            {% endif %}
+                            <h5 class="card-title">{{ profile.user.get_full_name|default:profile.user.username }}</h5>
+                            <p class="card-text text-muted">
+                                {{ profile.job_title|default:"" }}{% if profile.job_title and profile.current_company %}
+                                at {% endif %}{{ profile.current_company|default:"" }}
+                            </p>
+                            <p class="card-text">Class of {{ profile.graduation_year }}</p>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+                {% else %}
+                <div class="col">
+                    <p>No alumni profiles yet.</p>
+                </div>
+                {% endif %}
+            </div>
+            <a href="{% url 'alumni_directory' %}" class="btn btn-primary">View Alumni Directory</a>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,58 @@
+{% extends 'base.html' %}
+
+{% block title %}Notifications | Alumni Connect{% endblock %}
+
+{% block content %}
+<div class="container py-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h1>Notifications</h1>
+        {% if unread_count > 0 %}
+        <a href="?mark_all_read=true" class="btn btn-outline-primary">
+            <i class="fas fa-check-double me-1"></i> Mark All as Read
+        </a>
+        {% endif %}
+    </div>
+
+    {% if notifications %}
+    <div class="card shadow">
+        <div class="list-group list-group-flush">
+            {% for notification in notifications %}
+            <a href="{% url 'mark_notification_read' notification.id %}"
+                class="list-group-item list-group-item-action {% if not notification.read %}bg-light{% endif %}">
+                <div class="d-flex w-100 justify-content-between">
+                    <h5 class="mb-1">
+                        {% if not notification.read %}
+                        <span class="badge bg-primary me-2">New</span>
+                        {% endif %}
+                        {{ notification.title }}
+                    </h5>
+                    <small>{{ notification.timestamp|timesince }} ago</small>
+                </div>
+                <p class="mb-1">{{ notification.message }}</p>
+                <small class="text-muted">
+                    {% if notification.notification_type == 'mentorship_request' %}
+                    <i class="fas fa-user-graduate me-1"></i> Mentorship Request
+                    {% elif notification.notification_type == 'mentorship_response' %}
+                    <i class="fas fa-reply me-1"></i> Mentorship Response
+                    {% elif notification.notification_type == 'event_reminder' %}
+                    <i class="fas fa-calendar-alt me-1"></i> Event Reminder
+                    {% elif notification.notification_type == 'new_message' %}
+                    <i class="fas fa-envelope me-1"></i> New Message
+                    {% elif notification.notification_type == 'career_update' %}
+                    <i class="fas fa-briefcase me-1"></i> Career Update
+                    {% endif %}
+                    {% if notification.sender %}
+                    from {{ notification.sender.get_full_name|default:notification.sender.username }}
+                    {% endif %}
+                </small>
+            </a>
+            {% endfor %}
+        </div>
+    </div>
+    {% else %}
+    <div class="alert alert-info">
+        <i class="fas fa-bell-slash me-2"></i> You don't have any notifications yet.
+    </div>
+    {% endif %}
+</div>
+{% endblock %}

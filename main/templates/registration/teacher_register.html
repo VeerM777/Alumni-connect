@@ -1,0 +1,85 @@
+{% extends 'base.html' %}
+
+{% block title %}Teacher Registration - Alumni Connect{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <h2 class="text-center mb-4">Complete Your Teacher Profile</h2>
+            {% if messages %}
+                {% for message in messages %}
+                    <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+                        {{ message }}
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    </div>
+                {% endfor %}
+            {% endif %}
+            
+            <form method="post" enctype="multipart/form-data" class="card p-4 shadow">
+                {% csrf_token %}
+                
+                <h4 class="mb-3">Professional Information</h4>
+                <div class="row">
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label">Department*</label>
+                        {{ form.department }}
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label">Position*</label>
+                        {{ form.position }}
+                    </div>
+                </div>
+                
+                <div class="row">
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label">Specialization*</label>
+                        {{ form.specialization }}
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label">Teaching Experience (years)*</label>
+                        {{ form.teaching_experience }}
+                    </div>
+                </div>
+                
+                <div class="mb-3">
+                    <label class="form-label">Profile Picture</label>
+                    {{ form.profile_picture }}
+                </div>
+                
+                <hr class="my-4">
+                
+                <h4 class="mb-3">Academic Background</h4>
+                <div class="row">
+                    <div class="col-md-4 mb-3">
+                        <label class="form-label">Highest Degree*</label>
+                        {{ form.highest_degree }}
+                    </div>
+                    <div class="col-md-4 mb-3">
+                        <label class="form-label">Degree Year*</label>
+                        {{ form.degree_year }}
+                    </div>
+                    <div class="col-md-4 mb-3">
+                        <label class="form-label">Institution*</label>
+                        {{ form.degree_institution }}
+                    </div>
+                </div>
+                
+                <hr class="my-4">
+                
+                <div class="mb-3 form-check">
+                    {{ form.available_for_advising }}
+                    <label class="form-check-label">Available for student advising</label>
+                </div>
+                
+                <div class="mb-3">
+                    <label class="form-label">Bio</label>
+                    {{ form.bio }}
+                </div>
+                
+                <button type="submit" class="btn btn-primary w-100">Complete Registration</button>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

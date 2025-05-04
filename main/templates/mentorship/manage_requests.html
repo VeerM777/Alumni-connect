@@ -1,0 +1,100 @@
+{% extends 'base.html' %}
+
+{% block title %}Manage Mentorship Requests | Alumni Connect{% endblock %}
+
+{% block content %}
+<div class="container py-4">
+    <h1>Manage Mentorship Requests</h1>
+    <p class="lead text-muted">Review and respond to mentorship requests from students.</p>
+
+    <!-- Pending Requests -->
+    <div class="card shadow mb-4">
+        <div class="card-header bg-warning text-dark">
+            <h5 class="mb-0">Pending Requests</h5>
+        </div>
+        <div class="card-body">
+            {% if pending_requests %}
+            <div class="list-group">
+                {% for request in pending_requests %}
+                <div class="list-group-item">
+                    <div class="d-flex w-100 justify-content-between align-items-center">
+                        <h5 class="mb-1">{{ request.student.get_full_name|default:request.student.username }}</h5>
+                        <small>{{ request.created_at|date:"M d, Y" }}</small>
+                    </div>
+                    <p class="mb-1"><strong>Topic:</strong> {{ request.topic }}</p>
+                    <p class="mb-3">{{ request.message }}</p>
+                    <div class="d-flex justify-content-end">
+                        <a href="{% url 'respond_to_mentorship' request.id 'reject' %}"
+                            class="btn btn-sm btn-outline-danger me-2"
+                            onclick="return confirm('Are you sure you want to decline this request?')">
+                            <i class="fas fa-times-circle me-1"></i> Decline
+                        </a>
+                        <a href="{% url 'respond_to_mentorship' request.id 'accept' %}"
+                            class="btn btn-sm btn-success">
+                            <i class="fas fa-check-circle me-1"></i> Accept
+                        </a>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+            {% else %}
+            <p class="text-muted mb-0">No pending mentorship requests.</p>
+            {% endif %}
+        </div>
+    </div>
+
+    <!-- Accepted Requests -->
+    <div class="card shadow mb-4">
+        <div class="card-header bg-success text-white">
+            <h5 class="mb-0">Accepted Requests</h5>
+        </div>
+        <div class="card-body">
+            {% if accepted_requests %}
+            <div class="list-group">
+                {% for request in accepted_requests %}
+                <div class="list-group-item">
+                    <div class="d-flex w-100 justify-content-between">
+                        <h5 class="mb-1">{{ request.student.get_full_name|default:request.student.username }}</h5>
+                        <small>Accepted on {{ request.created_at|date:"M d, Y" }}</small>
+                    </div>
+                    <p class="mb-1"><strong>Topic:</strong> {{ request.topic }}</p>
+                    <p>{{ request.message }}</p>
+                    <div class="text-end">
+                        <a href="mailto:{{ request.student.email }}" class="btn btn-sm btn-primary">
+                            <i class="fas fa-envelope me-1"></i> Contact Student
+                        </a>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+            {% else %}
+            <p class="text-muted mb-0">No accepted mentorship requests.</p>
+            {% endif %}
+        </div>
+    </div>
+
+    <!-- Rejected Requests -->
+    <div class="card shadow">
+        <div class="card-header bg-secondary text-white">
+            <h5 class="mb-0">Declined Requests</h5>
+        </div>
+        <div class="card-body">
+            {% if rejected_requests %}
+            <div class="list-group">
+                {% for request in rejected_requests %}
+                <div class="list-group-item text-muted">
+                    <div class="d-flex w-100 justify-content-between">
+                        <h5 class="mb-1">{{ request.student.get_full_name|default:request.student.username }}</h5>
+                        <small>Declined on {{ request.created_at|date:"M d, Y" }}</small>
+                    </div>
+                    <p class="mb-1"><strong>Topic:</strong> {{ request.topic }}</p>
+                </div>
+                {% endfor %}
+            </div>
+            {% else %}
+            <p class="text-muted mb-0">No declined mentorship requests.</p>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %}

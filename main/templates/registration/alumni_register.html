@@ -1,0 +1,111 @@
+{% extends 'base.html' %}
+
+{% block title %}Alumni Registration - Alumni Connect{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <h2 class="text-center mb-4">Complete Your Alumni Profile</h2>
+            {% if messages %}
+                {% for message in messages %}
+                    <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+                        {{ message }}
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    </div>
+                {% endfor %}
+            {% endif %}
+            
+            <form method="post" enctype="multipart/form-data" class="card p-4 shadow">
+                {% csrf_token %}
+                
+                <h4 class="mb-3">Basic Information</h4>
+                <div class="row">
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label">Graduation Year*</label>
+                        {{ form.graduation_year }}
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label">Degree*</label>
+                        {{ form.degree }}
+                    </div>
+                </div>
+                
+                <div class="row">
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label">Department*</label>
+                        {{ form.department }}
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label">Current Company</label>
+                        {{ form.current_company }}
+                    </div>
+                </div>
+                
+                <div class="mb-3">
+                    <label class="form-label">Profile Picture</label>
+                    {{ form.profile_picture }}
+                </div>
+                
+                <hr class="my-4">
+                
+                <h4 class="mb-3">Mentorship Information</h4>
+                <div class="mb-3 form-check">
+                    {{ form.is_available_for_mentoring }}
+                    <label class="form-check-label">I'm available for mentoring students</label>
+                </div>
+                
+                <div id="mentorFields" style="display: none;">
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label">Area of Expertise*</label>
+                            {{ form.expertise }}
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label">Years of Experience*</label>
+                            {{ form.years_of_experience }}
+                        </div>
+                    </div>
+                    
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label">Mentoring Preference*</label>
+                            {{ form.mentoring_preference }}
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label">Availability*</label>
+                            {{ form.availability }}
+                        </div>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label class="form-label">LinkedIn Profile</label>
+                        {{ form.linkedin_profile }}
+                    </div>
+                </div>
+                
+                <div class="mb-3">
+                    <label class="form-label">Bio</label>
+                    {{ form.bio }}
+                </div>
+                
+                <button type="submit" class="btn btn-primary w-100">Complete Registration</button>
+            </form>
+        </div>
+    </div>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const mentorCheckbox = document.querySelector('#id_is_available_for_mentoring');
+    const mentorFields = document.querySelector('#mentorFields');
+    
+    function toggleMentorFields() {
+        mentorFields.style.display = mentorCheckbox.checked ? 'block' : 'none';
+    }
+    
+    mentorCheckbox.addEventListener('change', toggleMentorFields);
+    toggleMentorFields(); // Initialize
+});
+</script>
+{% endblock %}

@@ -1,0 +1,111 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card shadow">
+                <div class="card-header bg-primary text-white">
+                    <h3 class="mb-0">Register</h3>
+                </div>
+                <div class="card-body">
+                    <form method="post" enctype="multipart/form-data">
+                        {% csrf_token %}
+                        
+                        <!-- Basic User Info -->
+                        <div class="mb-3">
+                            <label class="form-label">Username</label>
+                            {{ form.username }}
+                            {% if form.username.errors %}
+                                <div class="text-danger">{{ form.username.errors }}</div>
+                            {% endif %}
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label class="form-label">Email</label>
+                            {{ form.email }}
+                            {% if form.email.errors %}
+                                <div class="text-danger">{{ form.email.errors }}</div>
+                            {% endif %}
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label class="form-label">Password</label>
+                            {{ form.password1 }}
+                            {% if form.password1.errors %}
+                                <div class="text-danger">{{ form.password1.errors }}</div>
+                            {% endif %}
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label class="form-label">Confirm Password</label>
+                            {{ form.password2 }}
+                            {% if form.password2.errors %}
+                                <div class="text-danger">{{ form.password2.errors }}</div>
+                            {% endif %}
+                        </div>
+                        
+                        <!-- User Type Selection -->
+                        <div class="mb-4">
+                            <label class="form-label">I am registering as:</label>
+                            <div class="d-flex gap-3">
+                                {% for choice in form.user_type %}
+                                    <div class="form-check">
+                                        {{ choice.tag }}
+                                        <label class="form-check-label" for="{{ choice.id_for_label }}">
+                                            {{ choice.choice_label }}
+                                        </label>
+                                    </div>
+                                {% endfor %}
+                            </div>
+                        </div>
+                        
+                        <!-- Dynamic Fields Based on User Type -->
+                        <div id="alumni-fields" class="user-type-fields">
+                            <!-- Alumni fields will be loaded via JavaScript -->
+                        </div>
+                        
+                        <div id="mentor-fields" class="user-type-fields">
+                            <!-- Mentor fields will be loaded via JavaScript -->
+                        </div>
+                        
+                        <div id="student-fields" class="user-type-fields">
+                            <!-- Student fields will be loaded via JavaScript -->
+                        </div>
+                        
+                        <button type="submit" class="btn btn-primary w-100">Register</button>
+                    </form>
+                </div>
+                <div class="card-footer text-center">
+                    Already have an account? <a href="{% url 'login' %}">Login here</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+// JavaScript to handle dynamic form fields
+document.addEventListener('DOMContentLoaded', function() {
+    const userTypeRadios = document.querySelectorAll('input[name="user_type"]');
+    
+    function showRelevantFields() {
+        document.querySelectorAll('.user-type-fields').forEach(div => {
+            div.style.display = 'none';
+        });
+        
+        const selectedType = document.querySelector('input[name="user_type"]:checked').value;
+        document.getElementById(`${selectedType}-fields`).style.display = 'block';
+    }
+    
+    userTypeRadios.forEach(radio => {
+        radio.addEventListener('change', showRelevantFields);
+    });
+    
+    // Initialize
+    if (userTypeRadios.length > 0) {
+        showRelevantFields();
+    }
+});
+</script>
+{% endblock %}

@@ -1,0 +1,115 @@
+{% extends 'base.html' %}
+
+{% block title %}Alumni Directory | Alumni Connect{% endblock %}
+
+{% block content %}
+<div class="container py-4">
+    <h1>Alumni Directory</h1>
+    <p class="lead text-muted">Connect with our alumni network around the world.</p>
+
+    <!-- Search and Filter -->
+    <div class="card shadow mb-4">
+        <div class="card-body">
+            <form method="get" class="row g-3">
+                <div class="col-md-5">
+                    <label for="search-input" class="form-label">Search</label>
+                    <div class="input-group">
+                        <span class="input-group-text"><i class="fas fa-search"></i></span>
+                        <input type="text" id="search-input" name="search" class="form-control"
+                            placeholder="Search by name, company, position..." value="{{ search_query }}">
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <label for="graduation-year-select" class="form-label">Graduation Year</label>
+                    <select id="graduation-year-select" name="graduation_year" class="form-select"
+                        aria-label="Filter alumni by graduation year">
+                        <option value="">All Years</option>
+                        {% for year in graduation_years %}
+                            {% with year|stringformat:"i" as formatted_year %}
+                                {% with selected_year|stringformat:"i" as formatted_selected_year %}
+                                    <option value="{{ year }}" {% if formatted_year == formatted_selected_year %}selected{% endif %}>
+                                        {{ year }}
+                                    </option>
+                                {% endwith %}
+                            {% endwith %}
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="col-md-3">
+                    <label for="department-select" class="form-label">Department</label>
+                    <select id="department-select" name="department" class="form-select"
+                        aria-label="Filter alumni by department">
+                        <option value="">All Departments</option>
+                        {% for dept in departments %}
+                            {% with dept as formatted_dept %}
+                                {% with selected_department as formatted_selected_department %}
+                                    <option value="{{ dept }}" {% if formatted_dept == formatted_selected_department %}selected{% endif %}>
+                                        {{ dept }}
+                                    </option>
+                                {% endwith %}
+                            {% endwith %}
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="col-md-1">
+                    <label class="form-label d-block">&nbsp;</label>
+                    <button type="submit" class="btn btn-primary w-100">Filter</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Results -->
+    <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
+        {% if alumni %}
+        {% for profile in alumni %}
+        <div class="col">
+            <div class="card card-profile h-100 shadow-sm">
+                <div class="card-body text-center">
+                    {% if profile.profile_picture %}
+                    <img src="{{ profile.profile_picture.url }}" alt="{{ profile.user.username }}"
+                        class="rounded-circle mb-3" style="width: 120px; height: 120px; object-fit: cover;">
+                    {% else %}
+                    <i class="fas fa-user-circle fa-6x text-secondary mb-3"></i>
+                    {% endif %}
+                    <h5 class="card-title">{{ profile.user.get_full_name|default:profile.user.username }}</h5>
+                    <p class="card-text text-muted mb-1">
+                        {{ profile.job_title|default:"" }}{% if profile.job_title and profile.current_company %} at {%
+                        endif %}{{ profile.current_company|default:"" }}
+                    </p>
+                    <p class="mb-1"><small>{{ profile.location|default:"" }}</small></p>
+                    <p class="mb-3">
+                        <span class="badge bg-light text-dark">Class of {{ profile.graduation_year }}</span>
+                        <span class="badge bg-light text-dark">{{ profile.department }}</span>
+                        <span class="badge bg-light text-dark">{{ profile.degree }}</span>
+                    </p>
+
+                    <div class="d-flex justify-content-center">
+                        {% if profile.linkedin_profile %}
+                        <a href="{{ profile.linkedin_profile }}" target="_blank"
+                            class="btn btn-sm btn-outline-primary me-2">
+                            <i class="fab fa-linkedin"></i> LinkedIn
+                        </a>
+                        {% endif %}
+
+                        {% if profile.is_available_for_mentoring and user.is_authenticated and not user == profile.user
+                        %}
+                        <a href="{% url 'request_mentorship' profile.id %}" class="btn btn-sm btn-outline-success">
+                            <i class="fas fa-user-graduate"></i> Request Mentorship
+                        </a>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+        {% else %}
+        <div class="col-12">
+            <div class="alert alert-info">
+                No alumni found matching your criteria. Try adjusting your search terms or filters.
+            </div>
+        </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

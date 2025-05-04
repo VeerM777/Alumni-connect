@@ -1,0 +1,117 @@
+{% extends 'base.html' %}
+
+{% block title %}Create Alumni Profile | Alumni Connect{% endblock %}
+
+{% block content %}
+<div class="container py-4">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card shadow">
+                <div class="card-header bg-primary text-white">
+                    <h4 class="mb-0">Complete Your Alumni Profile</h4>
+                </div>
+                <div class="card-body">
+                    <p class="text-center mb-4">Tell us more about yourself so others can connect with you.</p>
+
+                    <form method="post" enctype="multipart/form-data">
+                        {% csrf_token %}
+
+                        <div class="row mb-3">
+                            <div class="col-md-6">
+                                <label for="{{ form.graduation_year.id_for_label }}" class="form-label">Graduation Year</label>
+                                {{ form.graduation_year }}
+                                {% if form.graduation_year.errors %}
+                                <div class="text-danger">{{ form.graduation_year.errors }}</div>
+                                {% endif %}
+                            </div>
+                            <div class="col-md-6">
+                                <label for="{{ form.degree.id_for_label }}" class="form-label">Degree</label>
+                                {{ form.degree }}
+                                {% if form.degree.errors %}
+                                <div class="text-danger">{{ form.degree.errors }}</div>
+                                {% endif %}
+                                <div class="form-text">e.g. BTech, MTech, PhD</div>
+                            </div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="{{ form.department.id_for_label }}" class="form-label">Department</label>
+                            {{ form.department }}
+                            {% if form.department.errors %}
+                            <div class="text-danger">{{ form.department.errors }}</div>
+                            {% endif %}
+                            <div class="form-text">e.g. Computer Science, Electrical Engineering</div>
+                        </div>
+
+                        <div class="row mb-3">
+                            <div class="col-md-6">
+                                <label for="{{ form.current_company.id_for_label }}" class="form-label">Current Company</label>
+                                {{ form.current_company }}
+                                {% if form.current_company.errors %}
+                                <div class="text-danger">{{ form.current_company.errors }}</div>
+                                {% endif %}
+                            </div>
+                            <div class="col-md-6">
+                                <label for="{{ form.job_title.id_for_label }}" class="form-label">Job Title</label>
+                                {{ form.job_title }}
+                                {% if form.job_title.errors %}
+                                <div class="text-danger">{{ form.job_title.errors }}</div>
+                                {% endif %}
+                            </div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="{{ form.location.id_for_label }}" class="form-label">Location</label>
+                            {{ form.location }}
+                            {% if form.location.errors %}
+                            <div class="text-danger">{{ form.location.errors }}</div>
+                            {% endif %}
+                            <div class="form-text">e.g. New Delhi, India</div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="{{ form.linkedin_profile.id_for_label }}" class="form-label">LinkedIn Profile URL</label>
+                            {{ form.linkedin_profile }}
+                            {% if form.linkedin_profile.errors %}
+                            <div class="text-danger">{{ form.linkedin_profile.errors }}</div>
+                            {% endif %}
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="{{ form.bio.id_for_label }}" class="form-label">Bio</label>
+                            {{ form.bio }}
+                            {% if form.bio.errors %}
+                            <div class="text-danger">{{ form.bio.errors }}</div>
+                            {% endif %}
+                            <div class="form-text">Share a brief introduction about yourself</div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="{{ form.profile_picture.id_for_label }}" class="form-label">Profile Picture</label>
+                            {{ form.profile_picture }}
+                            {% if form.profile_picture.errors %}
+                            <div class="text-danger">{{ form.profile_picture.errors }}</div>
+                            {% endif %}
+                        </div>
+
+                        <div class="mb-4">
+                            <div class="form-check">
+                                {{ form.is_available_for_mentoring }}
+                                <label class="form-check-label" for="{{ form.is_available_for_mentoring.id_for_label }}">
+                                    I am available for mentoring students
+                                </label>
+                            </div>
+                        </div>
+
+                        <div class="d-grid">
+                            <button type="submit" class="btn btn-primary">
+                                <i class="fas fa-check-circle me-1"></i> Complete Profile
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
