@@ -10,17 +10,20 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/5.2/ref/settings/
 """
 
+import environ
+import dj_database_url
+import os
 from pathlib import Path
 
-# Build paths inside the project like this: BASE_DIR / 'subdir'.
+# Initialize environment variables
+env = environ.Env()
 BASE_DIR = Path(__file__).resolve().parent.parent
-
-
+environ.Env.read_env(os.path.join(BASE_DIR, ".env"))  # Add path here
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/5.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = "django-insecure-os^e!1vf24+81dyvch7xivp_a*#e&aymtee96w0^&95fe+i82%"
+SECRET_KEY = env("DJANGO_SECRET_KEY")
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -48,6 +51,7 @@ MIDDLEWARE = [
     "django.contrib.auth.middleware.AuthenticationMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
+    "main.middleware.SupabaseAuthMiddleware",  # Add this line
 ]
 
 ROOT_URLCONF = "alumniconnect.urls"
@@ -55,7 +59,9 @@ ROOT_URLCONF = "alumniconnect.urls"
 TEMPLATES = [
     {
         "BACKEND": "django.template.backends.django.DjangoTemplates",
-        "DIRS": [BASE_DIR / "templates"],  # This should be your global templates directory
+        "DIRS": [
+            BASE_DIR / "templates"
+        ],  # This should be your global templates directory
         "APP_DIRS": True,
         "OPTIONS": {
             "context_processors": [
@@ -68,7 +74,6 @@ TEMPLATES = [
 ]
 
 
-
 WSGI_APPLICATION = "alumniconnect.wsgi.application"
 
 
@@ -76,10 +81,9 @@ WSGI_APPLICATION = "alumniconnect.wsgi.application"
 # https://docs.djangoproject.com/en/5.2/ref/settings/#databases
 
 DATABASES = {
-    "default": {
-        "ENGINE": "django.db.backends.sqlite3",
-        "NAME": BASE_DIR / "db.sqlite3",
-    }
+    "default": dj_database_url.config(
+        default=env("DATABASE_URL", default="sqlite:///db.sqlite3"), conn_max_age=600
+    )
 }
 
 
@@ -87,7 +91,6 @@ DATABASES = {
 # https://docs.djangoproject.com/en/5.2/ref/settings/#auth-password-validators
 
 AUTH_PASSWORD_VALIDATORS = [
-    
     {
         "NAME": "django.contrib.auth.password_validation.MinimumLengthValidator",
     },
@@ -122,8 +125,8 @@ STATIC_URL = "static/"
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
-LOGIN_REDIRECT_URL = "dashboard"
-LOGOUT_REDIRECT_URL = "home"
+LOGIN_REDIRECT_URL = "/dashboard/"
+LOGOUT_REDIRECT_URL = "/"
 
 MEDIA_URL = "/media/"
 MEDIA_ROOT = BASE_DIR / "media"
@@ -138,3 +141,10 @@ MESSAGE_TAGS = {
     messages.WARNING: "alert-warning",
     messages.ERROR: "alert-danger",
 }
+
+# Supabase settings
+SUPABASE_URL = env("SUPABASE_URL")
+SUPABASE_KEY = env("SUPABASE_KEY")
+
+# In settings.py
+LOGIN_URL = "/login/"  # Match this to your actual login URL

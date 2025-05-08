@@ -8,68 +8,70 @@
         <div class="col-md-6">
             <h2 class="text-center mb-4">Create Your Account</h2>
             {% if messages %}
-                {% for message in messages %}
-                    <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
-                        {{ message }}
-                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                    </div>
-                {% endfor %}
+            {% for message in messages %}
+            <div class="alert alert-{{ message.tags }}">{{ message }}</div>
+            {% endfor %}
             {% endif %}
             {% if form.non_field_errors %}
-                <div class="alert alert-danger">
-                    {% for error in form.non_field_errors %}
-                        <p>{{ error }}</p>
-                    {% endfor %}
-                </div>
+            <div class="alert alert-danger">
+                {% for error in form.non_field_errors %}
+                <p>{{ error }}</p>
+                {% endfor %}
+            </div>
             {% endif %}
             <form method="post" class="card p-4 shadow">
                 {% csrf_token %}
                 <div class="mb-3">
                     <label for="id_username" class="form-label">Username* (unique)</label>
-                    <input type="text" name="username" id="id_username" class="form-control" value="{{ form.username.value|default_if_none:'' }}" required>
+                    <input type="text" name="username" id="id_username" class="form-control"
+                        value="{{ form.username.value|default_if_none:'' }}" required>
                     {% if form.username.errors %}
-                        <div class="text-danger small">{{ form.username.errors }}</div>
+                    <div class="text-danger small">{{ form.username.errors }}</div>
                     {% endif %}
                 </div>
                 <div class="mb-3">
                     <label for="id_email" class="form-label">Email* (unique)</label>
-                    <input type="email" name="email" id="id_email" class="form-control" value="{{ form.email.value|default_if_none:'' }}" required>
+                    <input type="email" name="email" id="id_email" class="form-control"
+                        value="{{ form.email.value|default_if_none:'' }}" required>
                     {% if form.email.errors %}
-                        <div class="text-danger small">{{ form.email.errors }}</div>
+                    <div class="text-danger small">{{ form.email.errors }}</div>
                     {% endif %}
                 </div>
                 <div class="mb-3">
                     <label for="id_password1" class="form-label">Password* (min 8 chars, not common)</label>
                     <input type="password" name="password1" id="id_password1" class="form-control" required>
                     {% if form.password1.errors %}
-                        <div class="text-danger small">{{ form.password1.errors }}</div>
+                    <div class="text-danger small">{{ form.password1.errors }}</div>
                     {% endif %}
                 </div>
                 <div class="mb-3">
                     <label for="id_password2" class="form-label">Confirm Password*</label>
                     <input type="password" name="password2" id="id_password2" class="form-control" required>
                     {% if form.password2.errors %}
-                        <div class="text-danger small">{{ form.password2.errors }}</div>
+                    <div class="text-danger small">{{ form.password2.errors }}</div>
                     {% endif %}
                 </div>
                 <div class="mb-3">
                     <label class="form-label">User Type*</label>
                     <div>
                         <div class="form-check form-check-inline">
-                            <input class="form-check-input" type="radio" name="user_type" id="alumni" value="alumni" {% if form.user_type.value == 'alumni' %}checked{% endif %} required>
+                            <input class="form-check-input" type="radio" name="user_type" id="alumni" value="alumni" 
+                                {% if form.user_type.value == 'alumni' %}checked{% endif %} required>
                             <label class="form-check-label" for="alumni">Alumni</label>
                         </div>
                         <div class="form-check form-check-inline">
-                            <input class="form-check-input" type="radio" name="user_type" id="teacher" value="teacher" {% if form.user_type.value == 'teacher' %}checked{% endif %} required>
+                            <input class="form-check-input" type="radio" name="user_type" id="teacher" value="teacher"
+                                {% if form.user_type.value == 'teacher' %}checked{% endif %} required>
                             <label class="form-check-label" for="teacher">Teacher</label>
                         </div>
                         <div class="form-check form-check-inline">
-                            <input class="form-check-input" type="radio" name="user_type" id="student" value="student" {% if form.user_type.value == 'student' %}checked{% endif %} required>
+                            <input class="form-check-input" type="radio" name="user_type" id="student" value="student"
+                                {% if form.user_type.value == 'student' %}checked{% endif %} required>
                             <label class="form-check-label" for="student">Student</label>
                         </div>
                     </div>
                     {% if form.user_type.errors %}
-                        <div class="text-danger small">{{ form.user_type.errors }}</div>
+                    <div class="text-danger small">{{ form.user_type.errors }}</div>
                     {% endif %}
                 </div>
                 <button type="submit" class="btn btn-primary w-100">Continue</button>

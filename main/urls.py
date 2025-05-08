@@ -11,7 +11,7 @@ urlpatterns = [
     path("register/alumni/", views.alumni_register, name="alumni_register"),
     path("register/teacher/", views.teacher_register, name="teacher_register"),
     path("register/student/", views.student_register, name="student_register"),
-    path("login/", LoginView.as_view(template_name='main/login.html'), name="login"),
+    path("login/", views.login, name="login"),
     path("logout/", views.custom_logout, name="logout"),
     # Dashboard
     path("dashboard/", views.dashboard, name="dashboard"),
@@ -91,4 +91,6 @@ urlpatterns = [
         views.mark_notification_read,
         name="mark_notification_read",
     ),
+    # Update alumni_list to use Supabase
+    path("alumni/", views.alumni_directory, name="alumni_directory"),
 ]

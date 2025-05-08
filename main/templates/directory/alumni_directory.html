@@ -25,13 +25,13 @@
                         aria-label="Filter alumni by graduation year">
                         <option value="">All Years</option>
                         {% for year in graduation_years %}
-                            {% with year|stringformat:"i" as formatted_year %}
-                                {% with selected_year|stringformat:"i" as formatted_selected_year %}
-                                    <option value="{{ year }}" {% if formatted_year == formatted_selected_year %}selected{% endif %}>
-                                        {{ year }}
-                                    </option>
-                                {% endwith %}
-                            {% endwith %}
+                        {% with year|stringformat:"i" as formatted_year %}
+                        {% with selected_year|stringformat:"i" as formatted_selected_year %}
+                        <option value="{{ year }}" {% if formatted_year==formatted_selected_year %}selected{% endif %}>
+                            {{ year }}
+                        </option>
+                        {% endwith %}
+                        {% endwith %}
                         {% endfor %}
                     </select>
                 </div>
@@ -41,13 +41,14 @@
                         aria-label="Filter alumni by department">
                         <option value="">All Departments</option>
                         {% for dept in departments %}
-                            {% with dept as formatted_dept %}
-                                {% with selected_department as formatted_selected_department %}
-                                    <option value="{{ dept }}" {% if formatted_dept == formatted_selected_department %}selected{% endif %}>
-                                        {{ dept }}
-                                    </option>
-                                {% endwith %}
-                            {% endwith %}
+                        {% with dept as formatted_dept %}
+                        {% with selected_department as formatted_selected_department %}
+                        <option value="{{ dept }}" {% if formatted_dept==formatted_selected_department %}selected{%
+                            endif %}>
+                            {{ dept }}
+                        </option>
+                        {% endwith %}
+                        {% endwith %}
                         {% endfor %}
                     </select>
                 </div>
@@ -66,13 +67,13 @@
         <div class="col">
             <div class="card card-profile h-100 shadow-sm">
                 <div class="card-body text-center">
-                    {% if profile.profile_picture %}
-                    <img src="{{ profile.profile_picture.url }}" alt="{{ profile.user.username }}"
+                    {% if profile.profile_picture_url %}
+                    <img src="{{ profile.profile_picture_url }}" alt="{{ profile.auth_user.username }}"
                         class="rounded-circle mb-3" style="width: 120px; height: 120px; object-fit: cover;">
                     {% else %}
                     <i class="fas fa-user-circle fa-6x text-secondary mb-3"></i>
                     {% endif %}
-                    <h5 class="card-title">{{ profile.user.get_full_name|default:profile.user.username }}</h5>
+                    <h5 class="card-title">{{ profile.auth_user.first_name }} {{ profile.auth_user.last_name }}</h5>
                     <p class="card-text text-muted mb-1">
                         {{ profile.job_title|default:"" }}{% if profile.job_title and profile.current_company %} at {%
                         endif %}{{ profile.current_company|default:"" }}
@@ -92,8 +93,7 @@
                         </a>
                         {% endif %}
 
-                        {% if profile.is_available_for_mentoring and user.is_authenticated and not user == profile.user
-                        %}
+                        {% if profile.is_available_for_mentoring and user.is_authenticated %}
                         <a href="{% url 'request_mentorship' profile.id %}" class="btn btn-sm btn-outline-success">
                             <i class="fas fa-user-graduate"></i> Request Mentorship
                         </a>
